@@ -32,3 +32,24 @@ def metrics(model, test_loader, top_k):
 		NDCG.append(ndcg(gt_item, recommends))
 
 	return np.mean(HR), np.mean(NDCG)
+
+def rmse(model, loader):
+	sumsquares = 0
+	i = 1
+	total = len(loader)
+	print("Beginning evaluation")
+	for user, item, label in loader:
+
+		i=i+1
+		user = user.cuda()
+		item = item.cuda()
+		label = label.cuda()
+		predictions = model(user, item)
+		if (i%10000==0):
+			print(i+1, "out of", total, "data points evaluated")
+			print("predictions", predictions)
+			print("predictions", label)
+		msediff = ((predictions - label)**2).sum()
+		sumsquares+=msediff
+
+	return torch.sqrt(sumsquares/total)
