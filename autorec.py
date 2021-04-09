@@ -28,18 +28,20 @@ def train():
     num_epochs = 100
     
     train_data = pd.read_csv(
-        "ml-1m.train.rating", 
+        "NCF/datasets/ml-1m.train.rating", 
         sep='\t', header=None, names=['user', 'item', 'rating'], 
         usecols=[0, 1,2], dtype={0: np.int32, 1: np.int32, 2:np.int32})
 
-    train_data_matrix = train_data.pivot(index='user', columns='item', values='rating')
+    train_data_matrix = train_data.pivot(index='user', columns='item', values='rating').to_numpy()
+
+    #print(train_data_matrix.to_numpy())
 
     test_data = pd.read_csv(
-        "ml-1m.test.rating", 
+        "NCF/datasets/ml-1m.test.rating", 
         sep='\t', header=None, names=['user', 'item', 'rating'], 
         usecols=[0, 1,2], dtype={0: np.int32, 1: np.int32, 2:np.int32})
 
-    test_data_matrix = test_data.pivot(index='user', columns='item',values='rating')
+    test_data_matrix = test_data.pivot(index='user', columns='item',values='rating').to_numpy()
 
     model = AutoRec(num_users=500, num_hidden=20)
 
@@ -47,6 +49,8 @@ def train():
 
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
     running_loss = 0.0
+
+    print(enumerate(train_dataloader))
 
     for epoch in range(num_epochs):
         for i, data in enumerate(train_dataloader):
@@ -67,3 +71,6 @@ def train():
             print('[%d] loss: %.3f' %
                 (epoch, running_loss / 10))
             running_loss = 0.0
+
+if __name__ == "__main__":
+    train()
