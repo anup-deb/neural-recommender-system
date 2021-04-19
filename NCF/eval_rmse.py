@@ -6,7 +6,7 @@ import evaluate
 import data_utils
 
 if __name__ == '__main__':
-    myModel = torch.load("../ncf_models/ml-1m-NeuMF-end.pth")
+    myModel = torch.load("../ncf_models/ml-1m-MLP.pth")
 
     train_data, test_data, user_num, item_num, train_mat = data_utils.load_all()
 
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     # train_rmse = evaluate.rmse(myModel, train_loader)
     # print("Train rmse is {}", train_rmse)
 
-    test_rmse = evaluate.rmse(myModel, test_loader)
+    test_rmse = evaluate.rmse(myModel, train_loader)
     print("Test rmse is ", test_rmse)
 
 
