@@ -47,8 +47,7 @@ def rmse(model, loader):
 		predictions = model(user, item)
 		if (i%10000==0):
 			print(i+1, "out of", total, "data points evaluated")
-			print("predictions", predictions)
-			print("predictions", label)
+			print('rmse so far: ', torch.sqrt(sumsquares/(i)))
 		msediff = ((predictions - label)**2).sum()
 		sumsquares+=msediff
 
